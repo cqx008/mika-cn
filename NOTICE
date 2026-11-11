@@ -1,0 +1,11 @@
+Mika
+Copyright 2026 wangzan101
+
+This distribution is based on wangzan101/Mika v0.1.39 (Apache-2.0).
+Local modifications by the community build:
+  - tools/sandbox/build-runtime.py: CN mirror fallback (aliyun/tuna),
+    preinstalled pip wheels, added git + jq to sandbox packages
+  - tools/sandbox/runtime/sources.lock: re-resolved alpine closure
+  - core/.../SandboxPackages.kt + app/.../BundledRuntime.kt: synced to 17-package list
+  - app/.../SandboxState.kt: default sandbox network allowed = true
+See LOCAL-CUSTOM.md for the full change inventory and self-check.
