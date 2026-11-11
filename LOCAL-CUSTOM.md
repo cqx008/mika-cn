@@ -75,10 +75,10 @@ python3 -u tools/sandbox/build-runtime.py
 ```kotlin
 signingConfigs {
     release {
-        storeFile = File("/data/mika-release-key.jks")
-        storePassword = "mika1234"
+        storeFile = File("<MIKA_KEYSTORE_PATH>")
+        storePassword = "<env:MIKA_KEYSTORE_PASSWORD>"
         keyAlias = "mika"
-        keyPassword = "mika1234"
+        keyPassword = "<env:MIKA_KEY_PASSWORD>"
     }
 }
 // release buildType 用 release signingConfig
@@ -100,4 +100,4 @@ versionName = "0.1.39"
 
 ① 烘焙内存峰值：git 及 C 依赖使 tree 解压峰值 >15G，**必须开 8G swap**（`/data/swapfile`），否则 OOM 杀进程导致产物不落盘。
 ② 并发烘焙互踩：多个 build-runtime.py 同时跑会抢下载缓存（.part 文件互相覆盖），**一次只跑一个**。
-③ 签名：mika-release-key.jks（别名 mika / 密码 mika1234），本地证书 SHA-256 = `35:4C:FF:57:23:D4:69:0B:85:71:24:7D:12:81:FA:06:CB:38:BA:33:19:F0:B9:5B:BB:E9:F6:01:5E:7B:5D:C3`，与官方作者签名不同，须先卸载再装。
+③ 签名：mika-release-key.jks（别名 mika / 密码 <env:MIKA_KEYSTORE_PASSWORD>），本地证书 SHA-256 = `35:4C:FF:57:23:D4:69:0B:85:71:24:7D:12:81:FA:06:CB:38:BA:33:19:F0:B9:5B:BB:E9:F6:01:5E:7B:5D:C3`，与官方作者签名不同，须先卸载再装。

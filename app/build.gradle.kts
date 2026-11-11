@@ -54,14 +54,23 @@ android {
     sourceSets.getByName("androidTest").assets.srcDir(rootProject.file("eval/tasks"))
 
     signingConfigs {
-        // 自签 release 包:指向本机 keystore(JKS, storepass=keypass=mika1234, alias=mika)。
-        val keystore = File("/data/mika-release-key.jks")
-        if (keystore.exists()) {
+        // 自签 release 包:从本地 signing.local.properties 或环境变量读取,不写进公开仓库。
+        // 本地构建: cp signing.local.properties.example signing.local.properties 并填入本机值。
+        val keystorePath = (project.findProperty("mika.keystorePath") as String?)
+            ?: System.getenv("MIKA_KEYSTORE_PATH")
+        val keystorePass = (project.findProperty("mika.keystorePassword") as String?)
+            ?: System.getenv("MIKA_KEYSTORE_PASSWORD")
+        val keyAlias = (project.findProperty("mika.keyAlias") as String?)
+            ?: System.getenv("MIKA_KEY_ALIAS") ?: "mika"
+        val keyPass = (project.findProperty("mika.keyPassword") as String?)
+            ?: System.getenv("MIKA_KEY_PASSWORD") ?: keystorePass
+        val keystore = keystorePath?.let { File(it) }
+        if (keystore?.exists() == true && keystorePass != null) {
             create("release") {
                 storeFile = keystore
-                storePassword = "mika1234"
-                keyAlias = "mika"
-                keyPassword = "mika1234"
+                storePassword = keystorePass
+                this.keyAlias = keyAlias
+                keyPassword = keyPass
             }
         }
     }
